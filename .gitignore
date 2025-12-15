@@ -1,0 +1,35 @@
+# 1. Segurança (CRÍTICO)
+.env
+.env.local
+*.key
+secrets.json
+
+# 2. Python & Compilados
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# 3. Ambientes Virtuais
+.venv/
+venv/
+env/
+
+# 4. Banco de Dados e Caches Locais (Gerados pelo 'make index')
+db/
+chroma_data/
+.chroma/
+
+# 5. Saídas de Execução (Geradas pelo 'make run')
+# Ignoramos a pasta out/ inteira para não sujar o repo com testes
+out/
+
+# 6. Testes e Logs
+.pytest_cache/
+*.log
+coverage.xml
+.coverage
+
+# 7. Sistema Operacional (Lixo do Mac/Windows)
+.DS_Store
+Thumbs.db
