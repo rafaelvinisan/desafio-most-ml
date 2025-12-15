@@ -17,9 +17,8 @@ index:
 	@echo "📚 [INDEX] Ingerindo PDFs e criando Vector Store..."
 	$(PYTHON) src/ingest.py
 
-# "make mcp" - Sobe o servidor MCP (Teste de sanidade)
-# Nota: Como usamos stdio, isso vai iniciar e ficar aguardando input. 
-# O avaliador deve usar Ctrl+C para sair.
+# "make mcp" - Sobe o servidor MCP como servidor HTTP (SSE)
+# Nota: O servidor ficará escutando na porta 8000 e deve permanecer rodando em um terminal separado.
 mcp:
 	@echo "📡 [MCP] Iniciando Servidor HTTP SSE na porta 8000..."
 	@echo "ℹ️  Mantenha este terminal aberto."

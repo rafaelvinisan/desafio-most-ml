@@ -7,8 +7,7 @@ import argparse
 from typing import Any
 from crewai import Agent, Task, Crew, Process
 from crewai.tools import BaseTool
-from mcp import ClientSession, StdioServerParameters
-from mcp.client.stdio import stdio_client
+from mcp import ClientSession
 from dotenv import load_dotenv
 from src.utils import process_input, extract_json_from_text, clean_input_for_tool
 from mcp.client.sse import sse_client

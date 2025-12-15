@@ -76,12 +76,11 @@ def main():
     # 1. Configurar Cliente ChromaDB
     client = chromadb.PersistentClient(path=DB_PATH)
     
-    # --- MUDANÇA AQUI: Usando Embeddings Locais (Gratuito) ---
+    
     print("⚙️  Carregando modelo de embeddings local (pode demorar um pouco na 1ª vez)...")
     embedding_func = embedding_functions.SentenceTransformerEmbeddingFunction(
-        model_name="all-MiniLM-L6-v2" # Modelo leve e eficiente
+        model_name="all-MiniLM-L6-v2"
     )
-    # ---------------------------------------------------------
 
     try:
         client.delete_collection(name=COLLECTION_NAME)

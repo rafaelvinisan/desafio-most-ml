@@ -112,7 +112,6 @@ def process_input(source: str) -> str:
         
     return source
 
-# --- MANTIDOS ---
 def clean_input_for_tool(input_data: Any) -> str:
     if isinstance(input_data, dict): return str(list(input_data.values())[0])
     return str(input_data).replace('{"query":', '').replace('}', '').replace('"', '').strip()
@@ -131,7 +130,6 @@ def extract_json_from_text(text: str) -> Optional[Dict]:
     try:
         return json.loads(text)
     except json.JSONDecodeError:
-        # --- CORREÇÃO APLICADA AQUI ---
         # 3. Recuperação de erros comuns (vírgulas extras)
         try:
             # Remove vírgula antes de fechar chaves }

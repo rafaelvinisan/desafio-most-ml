@@ -56,7 +56,6 @@ def test_url_404(mock_get):
     with pytest.raises(ValueError) as excinfo:
         process_input("http://site-inexistente.com/nada")
     
-    # CORREÇÃO: Verifica se "Erro" E "URL" estão na mensagem
     assert "Erro" in str(excinfo.value) and "URL" in str(excinfo.value)
 
 # --- TESTE 4: INPUT LIXO (GIGO - Garbage In, Garbage Out) ---

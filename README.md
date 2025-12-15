@@ -59,35 +59,93 @@ make setup
 make index
 ```
 
+### 3. Subindo o Servidor MCP (HTTP + SSE)
+
+O servidor MCP agora roda como um **servidor HTTP** com **Server-Sent Events (SSE)**.
+
+Em um terminal separado, execute:
+
+```bash
+make mcp
+```
+
+Isso irá:
+- **Subir um servidor Uvicorn** apontando para `src/mcp_server.py`.
+- Expor o endpoint SSE em `http://localhost:8000/sse`.
+- Expor o endpoint de mensagens em `http://localhost:8000/messages` (usado internamente pelo MCP).
+
+Mantenha este terminal **aberto**, pois o agente/cliente se conecta a esse servidor.
+
 ## 📚 Como Usar (CLI)
 
 O sistema possui uma CLI robusta em `src/agent.py` capaz de processar URLs, Arquivos PDF locais ou Texto Bruto.
+Internamente, o agente se conecta ao servidor MCP via SSE usando o endpoint:
 
-**Sintaxe:**
-```bash
-python src/agent.py [FONTE] --name [NOME_DO_OUTPUT]
+```text
+MCP_SERVER_URL = "http://localhost:8000/sse"
 ```
 
-### Cenário 1: Analisando uma URL (Recomendado)
-O sistema baixa o HTML/PDF, limpa menus/scripts e processa o conteúdo.
+Por isso, **certifique-se de que o comando `make mcp` está rodando em outro terminal** antes de executar o agente.
+
+### 1. Execução via Makefile (Recomendado)
+
+**Sintaxe (via `make agent`):**
 
 ```bash
-# Exemplo: Artigo sobre Transformers no ArXiv
-python src/agent.py "https://arxiv.org/abs/1706.03762" --name analise_transformers
+make mcp                               # em um terminal separado
+make agent SOURCE="FONTE" NAME="nome"  # em outro terminal
 ```
 
-### Cenário 2: Analisando um PDF Local
-Utiliza `pypdf` com validação de OCR.
+Onde:
+- **`SOURCE`**: caminho de arquivo PDF, URL ou texto bruto.
+- **`NAME`**: nome-base para os arquivos de saída em `out/` (sem extensão).
+
+#### Exemplos com `make agent`
+
+- **URL (Transformers no ArXiv)**:
 
 ```bash
-python src/agent.py samples/meu_artigo.pdf --name analise_local
+make mcp
+make agent SOURCE="https://arxiv.org/abs/1706.03762" NAME="analise_transformers"
 ```
 
-### Cenário 3: Analisando Texto Bruto
-Ideal para testes rápidos.
+- **PDF Local**:
 
 ```bash
-python src/agent.py "We propose a new network architecture..." --name teste_texto
+make mcp
+make agent SOURCE="samples/input_article_1.pdf" NAME="analise_local"
+```
+
+- **Texto Bruto**:
+
+```bash
+make mcp
+make agent SOURCE="We propose a new network architecture..." NAME="teste_texto"
+```
+
+### 2. Execução direta via Python (Alternativa)
+
+Você também pode chamar diretamente o script `src/agent.py`:
+
+```bash
+make mcp                              # em um terminal separado
+uv run python src/agent.py [FONTE] --name [NOME_DO_OUTPUT]
+```
+
+Exemplos equivalentes:
+
+```bash
+# URL
+make mcp
+uv run python src/agent.py "https://arxiv.org/abs/1706.03762" --name analise_transformers
+
+# PDF Local
+make mcp
+uv run python src/agent.py samples/input_article_1.pdf --name analise_local
+
+# Texto Bruto
+make mcp
+uv run python src/agent.py "We propose a new network architecture..." --name teste_texto
 ```
 
 ## 📦 Saída e Resultados
@@ -112,9 +170,36 @@ O projeto implementa camadas de defesa ("Hardening") validadas por testes:
 
 O projeto inclui uma suíte de testes (`pytest`) cobrindo lógica de extração, limpeza de input e cenários de falha.
 
+### 1. Testes gerais
+
 ```bash
 make test
 # Ou: uv run pytest tests/ -v
+```
+
+### 2. Cenários específicos do edital (atalhos via Makefile)
+
+Cada cenário já está mapeado em um alvo `make`:
+
+- **`make test1`** – PDF local de exemplo:
+
+```bash
+make mcp
+make test1
+```
+
+- **`make test2`** – URL externa (ArXiv):
+
+```bash
+make mcp
+make test2
+```
+
+- **`make test3`** – Edge case (Física Teórica / Schrodinger):
+
+```bash
+make mcp
+make test3
 ```
 
 ## 📂 Estrutura do Projeto
